@@ -1,0 +1,20 @@
+# Served at https://m2kura.dev/buylist via the host Caddy (see deploy/Caddyfile.snippet).
+#   docker compose up -d --build
+#   docker compose exec app node server/cli.js add <username>
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      BASE_PATH: ${BASE_PATH:-/buylist}
+      # Browsers reach the app over HTTPS (Cloudflare Tunnel), so the session cookie is Secure.
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      SESSION_DAYS: ${SESSION_DAYS:-60}
+    ports:
+      # Localhost only; Caddy is the public entrypoint. 3000-3004 are taken by the other apps.
+      - "127.0.0.1:${APP_PORT:-3005}:3000"
+    volumes:
+      - buylist_data:/app/data
+
+volumes:
+  buylist_data:

@@ -1,0 +1,5 @@
+# Goes inside the `http://m2kura.dev, http://www.m2kura.dev { ... }` block of /etc/caddy/Caddyfile.
+# The app serves under /buylist itself, so the prefix is kept (handle, not handle_path).
+    handle /buylist* {
+        reverse_proxy localhost:3005
+    }
